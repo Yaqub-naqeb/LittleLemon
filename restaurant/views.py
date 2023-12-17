@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from .models import MenuItem,Menu,Booking
 from rest_framework import generics
 from .serializers import MenuItemSerializer,BookingSerializer
-
+from rest_framework.authtoken.models import Token
 
     
 
@@ -28,3 +28,8 @@ class UserViewSet(viewsets.ModelViewSet):
    queryset = User.objects.all()
    serializer_class = UserSerializer
    permission_classes = [permissions.IsAuthenticated] 
+
+   def get_queryset(self):
+        user = self.request.user
+        token = Token.objects.get(user=user)
+        return Token.objects.filter(user=user)
